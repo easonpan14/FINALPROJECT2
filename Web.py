@@ -19,5 +19,5 @@ def index():
     return render_template('index.html', poem=poem, image_url=image_url)
 
 if __name__ == '__main__':
-    print("伺服器啟動中，請打開瀏覽器訪問 http://127.0.0.1:5001")
-    app.run(debug=True, port=5001)
+    print("伺服器啟動中，請使用伺服器 IP 地址訪問")
+    app.run(debug=True, host='0.0.0.0', port=5001)
