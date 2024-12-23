@@ -74,17 +74,14 @@ dictionary = {
     ]
 }
 
-# 確認 API_KEY 文件是否存在
-if not os.path.exists("apikey.txt"):
-    print("找不到 apikey.txt 文件，請確保它存在並包含您的 API KEY")
+
+# 確認 API_KEY 是否存在於環境變數
+API_KEY = os.getenv("GOOGLE_API_KEY")
+if not API_KEY:
+    print("未找到環境變數 GOOGLE_API_KEY，請設定 API 密鑰後再試")
     exit()
 
-# 讀取 API_KEY
-with open("apikey.txt", "r") as f:
-    API_KEY = f.readline().strip()
-    if not API_KEY:
-        print("API_KEY 為空，請在 apikey.txt 中填入您的 API 密鑰")
-        exit()
+
 
 # 發送 REST API 請求
 response = requests.post(
