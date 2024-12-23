@@ -24,4 +24,4 @@ def index():
 
 if __name__ == '__main__':
     print("伺服器啟動中，請使用伺服器 IP 地址訪問")
-    app.run(debug=True, host='0.0.0.0
+    app.run(debug=True, host='0.0.0.0', port=5001)
