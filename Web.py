@@ -5,9 +5,13 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    # 獲取圖片路徑
-    image_url = url_for('static', filename='image1.jpg')
-    
+    # 獲取圖片路徑，添加版本參數
+    image_path = 'static/image1.jpg'
+    if os.path.exists(image_path):
+        image_url = url_for('static', filename='image1.jpg', v=str(os.path.getmtime(image_path)))
+    else:
+        image_url = None
+
     # 讀取詩句內容
     poem_path = os.path.join('static', 'poem.txt')
     if os.path.exists(poem_path):
@@ -20,4 +24,4 @@ def index():
 
 if __name__ == '__main__':
     print("伺服器啟動中，請使用伺服器 IP 地址訪問")
-    app.run(debug=True, host='0.0.0.0', port=5001)
+    app.run(debug=True, host='0.0.0.0
