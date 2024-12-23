@@ -35,6 +35,23 @@ def capture_image():
     cv2.destroyAllWindows()
     return image_path
 
+# 解析回應數據
+def get_value(data, key):
+    if isinstance(data, dict):
+        for k, v in data.items():
+            if k == key:
+                return v
+            else:
+                value = get_value(v, key)
+                if value is not None:
+                    return value
+    elif isinstance(data, list):
+        for v in data:
+            value = get_value(v, key)
+            if value is not None:
+                return value
+    return None
+
 # 生成詩句
 def generate_poem(image_path):
     with open(image_path, "rb") as image_file:
@@ -67,7 +84,12 @@ def generate_poem(image_path):
     )
 
     response_json = response.json()
-    poem_text = response_json.get("text", "無法生成詩句，請檢查 API 回應")
+    poem_text = get_value(response_json, "text")
+    if not poem_text:
+        print("無法提取生成的文本，請檢查 API 回應")
+        print(response_json)
+        poem_text = "無法生成詩句。"
+
     return poem_text
 
 # 主程式
@@ -76,6 +98,6 @@ if __name__ == "__main__":
     if image_path:
         poem = generate_poem(image_path)
         # 保存詩句到文件
-        with open("static/poem.txt", "w") as f:
+        with open("static/poem.txt", "w", encoding="utf-8") as f:
             f.write(poem)
         print(f"詩句已保存：\n{poem}")
