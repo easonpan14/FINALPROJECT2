@@ -1,25 +1,14 @@
-from gtts import gTTS
-from io import BytesIO
 import os
-import json
 import base64
-from flask import Flask, render_template, url_for
-import pygame
 import cv2
 import requests
-import time
-
-app = Flask(__name__)
-pygame.init()
-
-# 全域變數存儲生成的詩句
-poem_text = ""
+import json
 
 # 確保 static 資料夾存在
 if not os.path.exists('static'):
     os.makedirs('static')
 
-# 拍攝影像並保存
+# 拍攝影像
 def capture_image():
     cap = cv2.VideoCapture(0)
     if not cap.isOpened():
@@ -38,18 +27,15 @@ def capture_image():
         key = cv2.waitKey(1)
         if key == 32:  # 空白鍵
             print("快門按下，保存影像...")
-            try:
-                cv2.imwrite(image_path, frame)
-                print(f"影像已保存至: {image_path}")
-            except Exception as e:
-                print(f"保存影像失敗: {e}")
+            cv2.imwrite(image_path, frame)
+            print(f"影像已保存至: {image_path}")
             break
 
     cap.release()
     cv2.destroyAllWindows()
     return image_path
 
-# 發送影像到 OpenAI API 並獲取詩句
+# 生成詩句
 def generate_poem(image_path):
     with open(image_path, "rb") as image_file:
         encoded_string = base64.b64encode(image_file.read())
@@ -81,45 +67,15 @@ def generate_poem(image_path):
     )
 
     response_json = response.json()
+    poem_text = response_json.get("text", "無法生成詩句，請檢查 API 回應")
+    return poem_text
 
-    def get_value(data, key):
-        if isinstance(data, dict):
-            for k, v in data.items():
-                if k == key:
-                    return v
-                else:
-                    value = get_value(v, key)
-                    if value is not None:
-                        return value
-        elif isinstance(data, list):
-            for v in data:
-                value = get_value(v, key)
-                if value is not None:
-                    return value
-        return None
-
-    response_text = get_value(response_json, "text")
-    if not response_text:
-        print("無法提取生成的文本，請檢查 API 回應")
-        print(response_json)
-        exit()
-
-    print(response_text)
-    return response_text
-
-# 啟動 Flask 網頁伺服器
-@app.route('/')
-def hello_world():
-    global poem_text
-    image_url = url_for('static', filename='image1.jpg')  # 獲取影像的 URL
-    return render_template('index.html', poem=poem_text, image_url=image_url)
-
-if __name__ == '__main__':
-    # 進行一次拍攝與生成詩句
+# 主程式
+if __name__ == "__main__":
     image_path = capture_image()
     if image_path:
-        poem_text = generate_poem(image_path)
-
-    # 啟動 Flask 網頁伺服器
-    print("伺服器啟動中，請打開瀏覽器訪問 http://127.0.0.1:5001")
-    app.run(debug=True, port=5001)
+        poem = generate_poem(image_path)
+        # 保存詩句到文件
+        with open("static/poem.txt", "w") as f:
+            f.write(poem)
+        print(f"詩句已保存：\n{poem}")
