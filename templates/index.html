@@ -1,104 +1,29 @@
-<!DOCTYPE html>
-<html lang="zh">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>詩詞機器人</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            font-size: 18px;
-            padding: 20px;
-            background-color: #f9f9f9;
-            color: #333;
-            text-align: center;
-        }
-        h1 {
-            font-size: 36px;
-            color: #444;
-            margin-bottom: 20px;
-        }
-        .content {
-            background-color: #fff;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            margin: 20px auto;
-            max-width: 600px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            text-align: left;
-            white-space: pre-wrap; /* 保留換行 */
-            word-wrap: break-word; /* 防止單詞溢出 */
-            overflow-wrap: break-word; /* 支援更現代的瀏覽器 */
-            word-break: break-all; /* 強制對過長單詞換行 */
-            line-height: 1.6; /* 提高可讀性 */
-            overflow: hidden; /* 防止內容溢出框外 */
-        }
-        img {
-            max-width: 100%;
-            height: auto;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        .button-container {
-            margin-top: 20px;
-        }
-        button, select {
-            background-color: #007BFF;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            font-size: 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin: 5px;
-        }
-        button:hover, select:hover {
-            background-color: #0056b3;
-        }
-        select {
-            padding: 10px;
-            color: #333;
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-        }
-    </style>
-</head>
-<body>
-    <h1>你好!!我是詩詞機器人!!我叫小詩</h1>
-    {% if image_url %}
-        <img src="{{ image_url }}" alt="Captured Image" />
-    {% else %}
-        <p>尚未拍攝影像</p>
-    {% endif %}
+from flask import Flask, render_template, url_for, request
+import os
 
-    <form method="POST">
-        <label for="content_type">選擇內容類型：</label>
-        <select id="content_type" name="content_type" onchange="this.form.submit()">
-            <option value="1" {% if selected_type == '1' %}selected{% endif %}>詩詞</option>
-            <option value="2" {% if selected_type == '2' %}selected{% endif %}>文案</option>
-            <option value="3" {% if selected_type == '3' %}selected{% endif %}>惡搞句子</option>
-            <option value="4" {% if selected_type == '4' %}selected{% endif %}>笑話或諧音梗</option>
-        </select>
-    </form>
+app = Flask(__name__)
 
-    <div class="content">
-        <h2>生成的內容：</h2>
-        <pre>{{ content }}</pre>
-    </div>
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    content_type = request.form.get('content_type', '1')  # 預設為生成詩句
+    content_file = f"static/content_{content_type}.txt"
+    
+    # 獲取圖片路徑，添加版本參數
+    image_path = 'static/image1.jpg'
+    if os.path.exists(image_path):
+        image_url = url_for('static', filename='image1.jpg', v=str(os.path.getmtime(image_path)))
+    else:
+        image_url = None
 
-    <div class="button-container">
-        <button onclick="window.location.reload();">重新加載</button>
-        <button onclick="alert('感謝您的支持!')">按我支持</button>
-        <button onclick="navigateToAbout();">關於我們</button>
-    </div>
+    # 讀取對應內容文件
+    if os.path.exists(content_file):
+        with open(content_file, "r", encoding="utf-8") as f:
+            content = f.read().strip()  # 清理多餘空白與換行
+    else:
+        content = "內容尚未生成，請先執行生成功能"
 
-    <script>
-        function navigateToAbout() {
-            alert('詩詞機器人小詩，致力於創作優美的詩句，讓您的生活更有詩意！');
-        }
-    </script>
-</body>
-</html>
+    return render_template('index.html', content=content, image_url=image_url, selected_type=content_type)
+
+if __name__ == '__main__':
+    print("伺服器啟動中，請使用伺服器 IP 地址訪問")
+    app.run(debug=True, host='0.0.0.0', port=5001)
