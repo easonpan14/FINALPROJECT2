@@ -27,10 +27,12 @@
             max-width: 600px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             text-align: left;
-            white-space: pre-wrap;
-            overflow-wrap: break-word; /* 防止單詞溢出 */
-            word-wrap: break-word; /* 支援更舊的瀏覽器 */
-            line-height: 1.6; /* 提高文字的可讀性 */
+            white-space: pre-wrap; /* 保留換行 */
+            word-wrap: break-word; /* 防止單詞溢出 */
+            overflow-wrap: break-word; /* 支援更現代的瀏覽器 */
+            word-break: break-all; /* 強制對過長單詞換行 */
+            line-height: 1.6; /* 提高可讀性 */
+            overflow: hidden; /* 防止內容溢出框外 */
         }
         img {
             max-width: 100%;
