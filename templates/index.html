@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>魔法相機本人</title>
+    <title>魔鏡本人</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -70,7 +70,7 @@
     </style>
 </head>
 <body>
-    <h1>我是魔法相機，讓我看看！！</h1>
+    <h1>魔鏡魔鏡，你看到了什麼...</h1>
 
     {% if image_url %}
         <img src="{{ image_url }}" alt="Captured Image" />
@@ -105,8 +105,8 @@
     <!-- 其他按鈕 -->
     <div class="button-container">
         <button onclick="window.location.reload();">重新加載</button>
-        <button onclick="alert('感謝您的支持!')">按我支持</button>
-        <button onclick="navigateToAbout();">關於我們</button>
+        <button onclick="alert('感謝您的支持!')">支持魔鏡</button>
+        <button onclick="navigateToAbout();">魔鏡的小秘密</button>
     </div>
 
     <script>
@@ -117,7 +117,7 @@
         }
 
         function navigateToAbout() {
-            alert('我是魔法相機，我致力於發現人世間的美好！！');
+            alert('我是魔鏡，你是世界上最棒的人！！，這裡沒有小秘密只有誇誇');
         }
     </script>
 </body>
