@@ -93,24 +93,6 @@ def generate_content(image_path, prompt):
 
     return content_text
 
-def analyze_compatibility(image_path):
-    """分析照片中的兩人適配度"""
-    # 加載圖片並檢測臉部數量
-    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
-    image = cv2.imread(image_path)
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
-
-    if len(faces) < 2:
-        return "照片中未檢測到兩人，請確保照片中出現兩個人臉。"
-    elif len(faces) > 2:
-        return "照片中有多於兩人，請提供僅包含兩個人的照片。"
-
-    # 模擬適配度分析
-    compatibility_score = 75  # 模擬得分
-    analysis = f"照片中兩人的面相適配度為 {compatibility_score}%。這兩人非常有默契，可能成為很好的夥伴！"
-    return analysis
-
 def main():
     ensure_static_folder()
 
@@ -120,7 +102,7 @@ def main():
     print("3. 輸出惡搞句子")
     print("4. 輸出笑話或諧音梗")
     print("5. 人格分析（分類成動物進行描述）")
-    print("6. 輸出照片中兩人適配度分析")
+    print("6. 星座分析（根據生日進行分析）")
 
     try:
         choice = int(input("請輸入選項 (1-6)："))
@@ -133,23 +115,23 @@ def main():
         2: "根據照片內容生成一段引人注目的文案，吸引讀者的注意力",
         3: "根據照片內容輸出一段幽默且誇張的惡搞句子",
         4: "根據照片內容創造一個笑話或諧音梗，讓人忍俊不禁",
-        5: "根據照片內容推測此人的性格，將其分類為某種動物並進行詳細分析",
+        5: "根據照片內容推測此人的性格，將其分類為某種動物並進行詳細分析，例如和善的人比喻成鴿子、漂亮的人比喻成蝴蝶、諸如此類",
+        6: "如果在畫面中看到兩個人，幫我分析兩個人的適配度（0~100分)"
     }
 
     image_path = capture_image()
     if image_path:
-        if choice == 6:
-            content = analyze_compatibility(image_path)
-            output_file = "static/content_6.txt"
+        generated_contents = {}
+        for key, prompt in prompts.items():
+            generated_contents[key] = generate_content(image_path, prompt)
+            output_file = f"static/content_{key}.txt"
             with open(output_file, "w", encoding="utf-8") as f:
-                f.write(content)
-            print(f"\n您選擇的內容如下：\n{content}")
-        elif choice in prompts:
-            content = generate_content(image_path, prompts[choice])
-            output_file = f"static/content_{choice}.txt"
-            with open(output_file, "w", encoding="utf-8") as f:
-                f.write(content)
-            print(f"\n您選擇的內容如下：\n{content}")
+                f.write(generated_contents[key])
+            print(f"內容 {key} 已生成並保存至：{output_file}")
+
+        # 終端機只顯示選擇的文本
+        if choice in generated_contents:
+            print(f"\n您選擇的內容如下：\n{generated_contents[choice]}")
         else:
             print("無效選項，請輸入 1 到 6。")
 
