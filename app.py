@@ -115,17 +115,21 @@ def main():
         4: "根據照片內容創造一個笑話或諧音梗，讓人忍俊不禁"
     }
 
-    if choice not in prompts:
-        print("無效選項，請輸入 1 到 4。")
-        return
-
     image_path = capture_image()
     if image_path:
-        content = generate_content(image_path, prompts[choice])
-        output_file = f"static/content_{choice}.txt"
-        with open(output_file, "w", encoding="utf-8") as f:
-            f.write(content)
-        print(f"內容已生成並保存至：{output_file}\n內容如下：\n{content}")
+        generated_contents = {}
+        for key, prompt in prompts.items():
+            generated_contents[key] = generate_content(image_path, prompt)
+            output_file = f"static/content_{key}.txt"
+            with open(output_file, "w", encoding="utf-8") as f:
+                f.write(generated_contents[key])
+            print(f"內容 {key} 已生成並保存至：{output_file}")
+
+        # 終端機只顯示選擇的文本
+        if choice in generated_contents:
+            print(f"\n您選擇的內容如下：\n{generated_contents[choice]}")
+        else:
+            print("無效選項，請輸入 1 到 4。")
 
 if __name__ == "__main__":
     main()
