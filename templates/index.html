@@ -18,7 +18,7 @@
             color: #444;
             margin-bottom: 20px;
         }
-        .poem {
+        .content {
             background-color: #fff;
             padding: 20px;
             border: 1px solid #ddd;
@@ -40,7 +40,7 @@
         .button-container {
             margin-top: 20px;
         }
-        button {
+        button, select {
             background-color: #007BFF;
             color: #fff;
             border: none;
@@ -50,18 +50,40 @@
             cursor: pointer;
             margin: 5px;
         }
-        button:hover {
+        button:hover, select:hover {
             background-color: #0056b3;
+        }
+        select {
+            padding: 10px;
+            color: #333;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
         }
     </style>
 </head>
 <body>
     <h1>你好!!我是詩詞機器人!!我叫小詩</h1>
-    <img src="{{ image_url }}" alt="Captured Image" />
-    <div class="poem">
-        <h2>詩詞內容：</h2>
-        <pre>{{ poem }}</pre>
+    {% if image_url %}
+        <img src="{{ image_url }}" alt="Captured Image" />
+    {% else %}
+        <p>尚未拍攝影像</p>
+    {% endif %}
+
+    <form method="POST">
+        <label for="content_type">選擇內容類型：</label>
+        <select id="content_type" name="content_type" onchange="this.form.submit()">
+            <option value="1" {% if selected_type == '1' %}selected{% endif %}>詩詞</option>
+            <option value="2" {% if selected_type == '2' %}selected{% endif %}>文案</option>
+            <option value="3" {% if selected_type == '3' %}selected{% endif %}>惡搞句子</option>
+            <option value="4" {% if selected_type == '4' %}selected{% endif %}>笑話或諧音梗</option>
+        </select>
+    </form>
+
+    <div class="content">
+        <h2>生成的內容：</h2>
+        <pre>{{ content }}</pre>
     </div>
+
     <div class="button-container">
         <button onclick="window.location.reload();">重新加載</button>
         <button onclick="alert('感謝您的支持!')">按我支持</button>
