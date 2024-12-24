@@ -18,7 +18,7 @@ def index():
     # 讀取對應內容文件
     if os.path.exists(content_file):
         with open(content_file, "r", encoding="utf-8") as f:
-            content = f.read()
+            content = f.read().strip()  # 清理多餘空白與換行
     else:
         content = "內容尚未生成，請先執行生成功能"
 
