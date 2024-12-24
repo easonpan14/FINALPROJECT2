@@ -78,4 +78,48 @@
         <p>尚未拍攝影像</p>
     {% endif %}
 
-    <!-- 選擇內
+    <!-- 選擇內容類型 -->
+    <form method="POST">
+        <label for="content_type">選擇內容類型：</label>
+        <select id="content_type" name="content_type" onchange="this.form.submit()">
+            <option value="1" {% if selected_type == '1' %}selected{% endif %}>詩詞</option>
+            <option value="2" {% if selected_type == '2' %}selected{% endif %}>文案</option>
+            <option value="3" {% if selected_type == '3' %}selected{% endif %}>惡搞句子</option>
+            <option value="4" {% if selected_type == '4' %}selected{% endif %}>笑話或諧音梗</option>
+            <option value="5" {% if selected_type == '5' %}selected{% endif %}>人格分析</option>
+            <option value="6" {% if selected_type == '6' %}selected{% endif %}>星座分析</option>
+        </select>
+    </form>
+
+    <!-- 顯示生成的內容 -->
+    <div class="content">
+        <h2>生成的內容：</h2>
+        <pre>{{ content }}</pre>
+    </div>
+
+    <!-- 分享功能 -->
+    <div class="share-container">
+        <h2>分享內容</h2>
+        <button onclick="shareContent()">分享到 Instagram</button>
+    </div>
+
+    <!-- 其他按鈕 -->
+    <div class="button-container">
+        <button onclick="window.location.reload();">重新加載</button>
+        <button onclick="alert('感謝您的支持!')">按我支持</button>
+        <button onclick="navigateToAbout();">關於我們</button>
+    </div>
+
+    <script>
+        function shareContent() {
+            const selectedType = document.getElementById('content_type').value;
+            const shareUrl = `/share/${selectedType}`;
+            window.location.href = shareUrl;
+        }
+
+        function navigateToAbout() {
+            alert('詩詞機器人小詩，致力於創作優美的詩句，讓您的生活更有詩意！');
+        }
+    </script>
+</body>
+</html>
