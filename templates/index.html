@@ -28,7 +28,7 @@
             max-height: 300px; /* 限制高度 */
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             text-align: left;
-            white-space: pre-wrap;
+            white-space: pre-wrap; /* 保留換行 */
             overflow-wrap: break-word; /* 防止單詞溢出 */
             word-wrap: break-word; /* 支援更舊的瀏覽器 */
             line-height: 1.6; /* 提高文字的可讀性 */
@@ -64,10 +64,6 @@
             background-color: #f9f9f9;
             border: 1px solid #ddd;
         }
-        .upload-container {
-            margin: 20px auto;
-            max-width: 600px;
-        }
         .share-container {
             margin-top: 20px;
         }
@@ -77,19 +73,10 @@
     <h1>你好!!我是詩詞機器人!!我叫小詩</h1>
 
     {% if image_url %}
-        <img src="{{ image_url }}" alt="Uploaded Image" />
+        <img src="{{ image_url }}" alt="Captured Image" />
     {% else %}
-        <p>尚未拍攝影像或上傳圖片</p>
+        <p>尚未拍攝影像</p>
     {% endif %}
-
-    <!-- 上傳圖片 -->
-    <div class="upload-container">
-        <h2>上傳圖片</h2>
-        <form method="POST" action="/upload" enctype="multipart/form-data">
-            <input type="file" name="file" accept=".jpg,.jpeg,.png">
-            <button type="submit">上傳圖片</button>
-        </form>
-    </div>
 
     <!-- 選擇內容類型 -->
     <form method="POST">
@@ -111,8 +98,8 @@
     <!-- 分享功能 -->
     <div class="share-container">
         <h2>分享內容</h2>
-        <a href="{{ url_for('share', content_type=selected_type) }}" target="_blank">
-            <button>分享到 Twitter</button>
+        <a href="https://www.instagram.com/" target="_blank">
+            <button>分享到 Instagram</button>
         </a>
     </div>
 
