@@ -56,6 +56,28 @@
         button:hover {
             background-color: #0056b3;
         }
+        form {
+            margin-top: 20px;
+        }
+        select {
+            font-size: 16px;
+            padding: 5px 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        input[type="submit"] {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #218838;
+        }
     </style>
 </head>
 <body>
@@ -69,6 +91,15 @@
         <h2>生成的內容：</h2>
         <pre>{{ content }}</pre>
     </div>
+    <form method="POST" action="/">
+        <label for="content_type">選擇內容類型：</label>
+        <select id="content_type" name="content_type">
+            <option value="1" {% if selected_type == '1' %}selected{% endif %}>詩句</option>
+            <option value="2" {% if selected_type == '2' %}selected{% endif %}>故事</option>
+            <option value="3" {% if selected_type == '3' %}selected{% endif %}>笑話</option>
+        </select>
+        <input type="submit" value="切換內容">
+    </form>
     <div class="button-container">
         <button onclick="window.location.reload();">重新加載</button>
         <button onclick="alert('感謝您的支持!')">按我支持</button>
