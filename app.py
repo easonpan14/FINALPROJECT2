@@ -53,7 +53,7 @@ def get_value(data, key):
                 return value
     return None
 
-def format_text(text, line_length=80):
+def format_text(text, line_length=30):
     """將文本格式化為指定的行長"""
     lines = []
     while len(text) > line_length:
@@ -137,7 +137,7 @@ def main():
         generated_contents = {}
         for key, prompt in prompts.items():
             generated_contents[key] = generate_content(image_path, prompt)
-            formatted_content = format_text(generated_contents[key])
+            formatted_content = format_text(generated_contents[key], line_length=30)
             output_file = f"static/content_{key}.txt"
             with open(output_file, "w", encoding="utf-8") as f:
                 f.write(formatted_content)
@@ -145,7 +145,7 @@ def main():
 
         # 終端機只顯示選擇的文本
         if choice in generated_contents:
-            print(f"\n您選擇的內容如下：\n{format_text(generated_contents[choice])}")
+            print(f"\n您選擇的內容如下：\n{format_text(generated_contents[choice], line_length=30)}")
         else:
             print("無效選項，請輸入 1 到 6。")
 
