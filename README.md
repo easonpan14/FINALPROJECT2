@@ -18,8 +18,11 @@
 打開Web.py以後可以透過運行ngrok來讓其他使用者從外網連線。
 
 ## 使用元件
-###Raspberry Pi Zero 2 W
+### Raspberry Pi Zero 2 W
 ![image](https://github.com/user-attachments/assets/5e77b77f-78d9-4af4-937f-dd065e9d36a0)
 
-###Webcam
+### Webcam
 ![image](https://github.com/user-attachments/assets/eb5f8687-b053-42aa-94c4-9010023daa4f)
+
+## 成果連結簡報
+https://www.canva.com/design/DAGaAf193rY/U5kYBCEWtw32AjaJlW-Fzw/edit?utm_content=DAGaAf193rY&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
